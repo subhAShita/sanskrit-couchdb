@@ -3,12 +3,21 @@ package subhAShita
 import org.slf4j.LoggerFactory
 import sanskritnlp.transliteration.transliterator
 
+import scala.collection.mutable
+
 class Subhashita(val text: String){
   val key: String = text
-  val startLetter: String = text.toList.head.toString
+  val start_letter: String = text.toList.head.toString
+  var topics: List[String] = List[String]()
+  var sources: List[String] = List[String]()
+  val language: String = null
+  var source_to_ratings = mutable.HashMap[String, Int]()
+  var description: String = null
+  var memorable_bits: List[String] = List[String]()
 }
 
 class SanskritSubhashita(override val text: String) extends Subhashita(text) {
+  override var language: String = 'संस्कृतम्'
   override val key: String =
     transliterator.transliterate(
       text.replaceAll("\\P{IsDevanagari}", "").replaceAll("[।॥०-९]+", "").replaceAll("\\s", ""), "dev", "optitrans")
