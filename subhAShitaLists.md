@@ -1,0 +1,1 @@
+<https://raw.githubusercontent.com/sanskrit-coders/subhAShita-db-sanskrit/master/mUlAni/mahA-subhAShita-sangraha_1_per_line_dev_nokeys.txt>
