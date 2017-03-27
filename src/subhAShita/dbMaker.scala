@@ -11,7 +11,7 @@ object dbMaker {
   var dbManager: Manager = null
   def openDatabase() = {
     dbManager =  new Manager(new JavaContext("data"), Manager.DEFAULT_OPTIONS);
-    db = dbManager.getDatabase("my-database");
+    db = dbManager.getDatabase("quoteDb");
   }
 
   def main(args: Array[String]): Unit = {
