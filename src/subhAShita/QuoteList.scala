@@ -6,7 +6,6 @@ import java.util
 import org.apache.commons.csv.{CSVFormat, CSVRecord, QuoteMode}
 import org.slf4j.LoggerFactory
 import sanskritnlp.subhAShita.{TopicAnnotation, _}
-import sanskritnlp.subhAShita.subhAShitaTest.getClass
 import sanskritnlp.transliteration.transliterator
 
 class QuoteList(val fileName: String, val id: String) {
