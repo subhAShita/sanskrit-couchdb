@@ -7,8 +7,8 @@ object dbMaker {
   val log = LoggerFactory.getLogger(getClass.getName)
   def main(args: Array[String]): Unit = {
     implicit val formats = Serialization.formats(NoTypeHints)
-    while (vishvasaPriyaPadyani.hasNext()) {
-      log debug Serialization.writePretty(vishvasaPriyaPadyani.next())
+    while (vishvasaPriyaSamskritaPadyani.hasNext()) {
+      log debug Serialization.writePretty(vishvasaPriyaSamskritaPadyani.next())
     }
   }
 }
