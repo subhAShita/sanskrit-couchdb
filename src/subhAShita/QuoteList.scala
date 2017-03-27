@@ -5,7 +5,7 @@ import java.util
 
 import org.apache.commons.csv.{CSVFormat, CSVRecord, QuoteMode}
 import org.slf4j.LoggerFactory
-import sanskritnlp.subhAShita.{TopicAnnotation, _}
+import sanskritnlp.quote.{TopicAnnotation, _}
 import sanskritnlp.transliteration.transliterator
 
 class QuoteList(val fileName: String, val id: String) {
@@ -20,8 +20,7 @@ object vishvasaPriyaSamskritaPadyani
     fileName = "/home/vvasuki/subhAShita-db-sanskrit/mUlAni/vishvAsa-priya-padyAni/प्रिय-काव्यांशाः priya-kAvyAmshAH subhAShitAni सुभाषितानि - पद्यानि.tsv",
     id = "विश्वास-प्रिय-पद्यानि") {
   val log = LoggerFactory.getLogger(getClass.getName)
-  override val source = Source(ScriptRendering(text = "विश्वास-प्रिय-संस्कृत-पद्यानि", scheme = transliterator.scriptDevanAgarI),
-    List(ScriptRendering(text = "विश्वासः", scheme = transliterator.scriptDevanAgarI)))
+  override val source = sourceHelper.getSanskritDevanaagariiSource("विश्वास-प्रिय-संस्कृत-पद्यानि", "विश्वासः"::Nil)
   def hasNext(): Boolean = records.hasNext
 
   def next(): QuoteInfo = {
@@ -36,13 +35,13 @@ object vishvasaPriyaSamskritaPadyani
         language = Language("sa"))
       var descriptionAnnotations = List[DescriptionAnnotation]()
       if (record.get("विवरणम्").nonEmpty) {
-        descriptionAnnotations = DescriptionAnnotation(key=quoteText.key, source, ScriptRendering(text = record.get("विवरणम्")))::Nil
+        descriptionAnnotations = DescriptionAnnotation(textKey=quoteText.key, source, ScriptRendering(text = record.get("विवरणम्")))::Nil
       }
       val subhashita = QuoteInfo(quoteText,
         descriptionAnnotations=descriptionAnnotations,
-        ratingAnnotations = RatingAnnotation(key=quoteText.key, source=source, overall = Rating(5))::Nil,
+        ratingAnnotations = RatingAnnotation(textKey=quoteText.key, source=source, overall = Rating(5))::Nil,
         topicAnnotations = record.get("विषयः").split(",").map(_.trim).map(
-          x => TopicAnnotation(key=quoteText.key, source=source,
+          x => TopicAnnotation(textKey=quoteText.key, source=source,
             topic = Topic(ScriptRendering(text = x, scheme = transliterator.scriptDevanAgarI),
               language = Language("sa")))).toList
       )

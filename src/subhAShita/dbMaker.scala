@@ -2,7 +2,7 @@ package subhAShita
 
 import com.couchbase.lite.{Database, JavaContext, Manager}
 import net.liftweb.json.{Serialization, ShortTypeHints}
-import sanskritnlp.subhAShita.{TopicAnnotation, _}
+import sanskritnlp.quote.{TopicAnnotation, _}
 import org.slf4j.LoggerFactory
 
 object dbMaker {
