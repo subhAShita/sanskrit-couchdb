@@ -39,5 +39,6 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
       * Flexibility (schema can easily be changed)
     * distributed nature: ability to operate at any scale.
       * Database copies can sync with each other easily - no centralization is good.
+  * Comparison [here](http://db-engines.com/en/system/Cassandra%3BCouchbase%3BMongoDB%3BRedis) .
   * Current favorite : Couchbase database, since it can be [used in many](https://developer.couchbase.com/documentation/mobile/1.4/training/develop/using-the-database/index.html) mobile OS-s.
 * Scala for the ingestion libraries (same justification as expressed [here](https://github.com/sanskrit-coders/sanskritnlpjava/blob/master/README.md#scala) ).
