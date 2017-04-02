@@ -29,8 +29,12 @@ object dbSanskritMaker extends dbMaker(language = Language("sa")){
         classOf[TopicAnnotation],
         classOf[RatingAnnotation]
       )))
+    openDatabase()
+
     while (vishvasaPriyaSamskritaPadyani.hasNext()) {
-      val jsonPretty = Serialization.writePretty(vishvasaPriyaSamskritaPadyani.next())
+      val quoteWithInfo = vishvasaPriyaSamskritaPadyani.next()
+      val quoteTextMap = Serialization.write(quoteWithInfo.quoteText)
+      val jsonPretty = Serialization.writePretty()
     }
   }
 }

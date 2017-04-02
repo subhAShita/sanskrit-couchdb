@@ -16,5 +16,6 @@
     <orderEntry type="library" name="Maven: com.thoughtworks.paranamer:paranamer:2.7" level="project" />
     <orderEntry type="library" name="com.couchbase.lite:couchbase-lite-java:1.4.0" level="project" />
     <orderEntry type="library" name="net.liftweb:lift-json_2.11:3.0.1" level="project" />
+    <orderEntry type="library" name="com.couchbase.lite:couchbase-lite-java-forestdb:1.4.0" level="project" />
   </component>
 </module>
