@@ -15,9 +15,9 @@
     <orderEntry type="library" name="org.apache.commons:commons-csv:1.4" level="project" />
     <orderEntry type="library" name="Maven: com.thoughtworks.paranamer:paranamer:2.7" level="project" />
     <orderEntry type="library" name="com.couchbase.lite:couchbase-lite-java:1.4.0" level="project" />
-    <orderEntry type="library" name="net.liftweb:lift-json_2.11:3.0.1" level="project" />
     <orderEntry type="library" name="com.couchbase.lite:couchbase-lite-java-forestdb:1.4.0" level="project" />
     <orderEntry type="library" name="com.fasterxml.jackson.core:jackson-core:2.8.8" level="project" />
     <orderEntry type="library" name="com.fasterxml.jackson.core:jackson-databind:2.8.8" level="project" />
+    <orderEntry type="library" name="net.liftweb:lift-json_2.11:3.0.1" level="project" />
   </component>
 </module>
