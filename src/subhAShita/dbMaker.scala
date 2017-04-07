@@ -12,12 +12,13 @@ class dbMaker(language: Language) {
   var dbManager: Manager = null
   def openDatabase() = {
     dbManager =  new Manager(new JavaContext("data"), Manager.DEFAULT_OPTIONS)
-    quoteDb = dbManager.getDatabase(s"quoteDb__${language.code}")
-    annotationDb = dbManager.getDatabase(s"annotationDb__${language.code}")
+    quoteDb = dbManager.getDatabase(s"quote_db__${language.code}")
+    // Does not work. quoteDb.setStorageType("ForestDB")
+    annotationDb = dbManager.getDatabase(s"annotation_db__${language.code}")
   }
 }
 
-object dbSanskritMaker extends dbMaker(language = Language("sa")){
+object dbMakerSanskrit extends dbMaker(language = Language("sa")){
 
   def main(args: Array[String]): Unit = {
     // implicit val formats = Serialization.formats(NoTypeHints)

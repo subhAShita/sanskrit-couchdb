@@ -39,9 +39,12 @@ object vishvasaPriyaSamskritaPadyani
           QuoteWithInfo(new QuoteText(text = record.get("विवरणम्"))))::Nil
       }
 
+      var originAnnotations  = List[OriginAnnotation]()
       val author = record.get("वक्ता")
-      var originAnnotation = OriginAnnotation(textKey=quoteText.key, source=source,
-        origin = sourceHelper.fromAuthor(author = author))
+      if (author.nonEmpty) {
+        originAnnotations = OriginAnnotation(textKey=quoteText.key, source=source,
+          origin = sourceHelper.fromAuthor(author = author)) :: Nil
+      }
       val subhashita = QuoteWithInfo(quoteText,
         descriptionAnnotations=descriptionAnnotations,
         ratingAnnotations = RatingAnnotation(textKey=quoteText.key, source=source, overall = Rating(5))::Nil,
@@ -49,7 +52,7 @@ object vishvasaPriyaSamskritaPadyani
           x => TopicAnnotation(textKey=quoteText.key, source=source,
             topic = Topic(ScriptRendering(text = x, scheme = transliterator.scriptDevanAgarI),
               language = Language("sa")))).toList,
-        originAnnotations = originAnnotation::Nil
+        originAnnotations = originAnnotations
       )
       return subhashita
     } else {
