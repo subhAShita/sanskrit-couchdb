@@ -12,7 +12,7 @@ import sanskritnlp.quote.{TopicAnnotation, _}
 import subhAShitaDb.dbMakerSanskrit.{log, quoteDb}
 
 // This version of the database uses Java (rather than Android) API.
-class QuoteDb(language: Language) {
+class QuoteInfoDb(language: Language) {
   val log = LoggerFactory.getLogger(getClass.getName)
   var quoteDb: Database = null
   var annotationDb: Database = null
@@ -64,8 +64,8 @@ class QuoteDb(language: Language) {
 
   def addAnnotation(annotation: Annotation): Boolean = {
     val jsonMap = getJsonMap(annotation)
-    log debug(annotation.getKey())
-    log debug(jsonMap.toString())
+//    log debug(annotation.getKey())
+//    log debug(jsonMap.toString())
     val document = annotationDb.getDocument(annotation.getKey())
     updateDocument(document, jsonMap)
     return true
@@ -82,16 +82,21 @@ class QuoteDb(language: Language) {
     return recordsModified
   }
 
+  def exportToTsv = {
+
+  }
 
 }
 
 
 object dbMakerSanskrit {
   val log = LoggerFactory.getLogger(getClass.getName)
-  val quoteDb = new QuoteDb(language = Language("sa"))
+  val quoteInfoDb = new QuoteInfoDb(language = Language("sa"))
 
   def main(args: Array[String]): Unit = {
-    quoteDb.openDatabase()
-    log info s"Updated records ${vishvasaPriyaSamskritaPadyani.map(quoteDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
+    quoteInfoDb.openDatabase()
+    quoteInfoDb.exportToTsv
+    // log info s"Updated records ${vishvasaPriyaSamskritaPadyani.map(quoteDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
+
   }
 }
