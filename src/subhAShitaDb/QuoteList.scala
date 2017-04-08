@@ -9,11 +9,14 @@ import org.slf4j.LoggerFactory
 import sanskritnlp.quote.{TopicAnnotation, _}
 import sanskritnlp.transliteration.transliterator
 
-class QuoteList(val fileName: String, val id: String) {
+abstract class QuoteList(val fileName: String, val id: String) extends Iterator[QuoteWithInfo] {
   var csvReader = new FileReader(fileName)
   var records: util.Iterator[CSVRecord] =
     CSVFormat.TDF.withFirstRecordAsHeader.withIgnoreEmptyLines.parse(csvReader).iterator()
   val source: Source = null
+
+  override def hasNext: Boolean = records.hasNext
+
 }
 
 object vishvasaPriyaSamskritaPadyani
@@ -22,7 +25,6 @@ object vishvasaPriyaSamskritaPadyani
     id = "विश्वास-प्रिय-पद्यानि") {
   val log = LoggerFactory.getLogger(getClass.getName)
   override val source = sourceHelper.getSanskritDevanaagariiSource("विश्वास-प्रिय-संस्कृत-पद्यानि", "विश्वासः"::Nil)
-  def hasNext(): Boolean = records.hasNext
 
   def next(): QuoteWithInfo = {
     val record = records.next()
@@ -45,13 +47,18 @@ object vishvasaPriyaSamskritaPadyani
         originAnnotations = OriginAnnotation(textKey=quoteText.key, source=source,
           origin = sourceHelper.fromAuthor(author = author)) :: Nil
       }
+      val topics = record.get("विषयः").split(",").map(_.trim)
+      var topicAnnotations = List[TopicAnnotation]()
+      if (topics.nonEmpty) {
+        topicAnnotations = TopicAnnotation(textKey=quoteText.key, source=source,
+          topics = topics.map(x =>
+            new Topic(ScriptRendering(text = x, scheme = transliterator.scriptDevanAgarI),
+              language = Language("sa"))).toList) :: Nil
+      }
       val subhashita = QuoteWithInfo(quoteText,
         descriptionAnnotations=descriptionAnnotations,
         ratingAnnotations = RatingAnnotation(textKey=quoteText.key, source=source, overall = Rating(5))::Nil,
-        topicAnnotations = record.get("विषयः").split(",").map(_.trim).map(
-          x => TopicAnnotation(textKey=quoteText.key, source=source,
-            topic = Topic(ScriptRendering(text = x, scheme = transliterator.scriptDevanAgarI),
-              language = Language("sa")))).toList,
+        topicAnnotations = topicAnnotations,
         originAnnotations = originAnnotations
       )
       return subhashita
