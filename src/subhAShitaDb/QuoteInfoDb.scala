@@ -2,6 +2,7 @@ package subhAShitaDb
 
 import java.io.File
 
+import scala.collection.JavaConversions.mapAsScalaMap
 import com.couchbase.lite.Document
 import com.couchbase.lite.UnsavedRevision
 import scala.collection.JavaConverters._
@@ -9,7 +10,10 @@ import com.couchbase.lite.{Database, Document, JavaContext, Manager}
 import net.liftweb.json.{Extraction, Serialization, ShortTypeHints}
 import org.slf4j.LoggerFactory
 import sanskritnlp.quote.{TopicAnnotation, _}
-import subhAShitaDb.dbMakerSanskrit.{log, quoteDb}
+import com.couchbase.lite.Query
+import com.couchbase.lite.QueryEnumerator
+import com.couchbase.lite.QueryRow
+import com.couchbase.lite.util.Log
 
 // This version of the database uses Java (rather than Android) API.
 class QuoteInfoDb(language: Language) {
@@ -17,7 +21,7 @@ class QuoteInfoDb(language: Language) {
   var quoteDb: Database = null
   var annotationDb: Database = null
   var dbManager: Manager = null
-  def openDatabase() = {
+  def openDatabases() = {
     dbManager =  new Manager(new JavaContext("data") {
       override def getRootDirectory: File = {
         val rootDirectoryPath = "/home/vvasuki/subhAShita-db-sanskrit"
@@ -27,6 +31,11 @@ class QuoteInfoDb(language: Language) {
     dbManager.setStorageType("ForestDB")
     quoteDb = dbManager.getDatabase(s"quote_db__${language.code}")
     annotationDb = dbManager.getDatabase(s"annotation_db__${language.code}")
+  }
+
+  def closeDatabases = {
+    quoteDb.close()
+    annotationDb.close()
   }
 
   def getJsonMap(caseObj: Any): Map[String,Object] = {
@@ -56,7 +65,8 @@ class QuoteInfoDb(language: Language) {
 
   def addQuote(quoteText: QuoteText) : Boolean = {
     val jsonMap = getJsonMap(quoteText)
-    // log debug(jsonMap.toString())
+     log debug(jsonMap.toString())
+//    sys.exit()
     val document = quoteDb.getDocument(quoteText.key)
     updateDocument(document, jsonMap)
     return true
@@ -82,10 +92,43 @@ class QuoteInfoDb(language: Language) {
     return recordsModified
   }
 
-  def exportToTsv = {
-
+  def checkConflicts = {
+    val query = quoteDb.createAllDocumentsQuery
+    query.setAllDocsMode(Query.AllDocsMode.ONLY_CONFLICTS)
+    val result = query.run
+    result.iterator().asScala.foreach(row => {
+      if (row.getConflictingRevisions.size > 0) {
+        Log.w("checkConflicts", "Conflict in document: %s", row.getDocumentId)
+      }
+    })
   }
 
+  def exportToTsv = {
+    val query = quoteDb.createAllDocumentsQuery
+    val result = query.run
+    result.iterator().asScala.map(_.getDocumentId).foreach(id => {
+      // val jsonMap = row.getDocument.getUserProperties.asScala("language").asInstanceOf[java.util.Map[String, Object]].asScala
+      val jsonMap = quoteDb.getDocument(id).getUserProperties
+      log debug jsonMap.toString
+    })
+  }
+
+  def testQuoteWrite() = {
+    val jsonMap =Map("scriptRenderings"-> List(Map("text"-> "दण्डः शास्ति प्रजाः सर्वाः दण्ड एवाभिरक्षति। दण्डः सुप्तेषु जागर्ति दण्डं धर्मं विदुर्बुधाः।।", "scheme" -> "dev", "startLetter" -> "द")),
+      "jsonClass"->"QuoteText",
+      "language"->{"code" -> "sa"},
+      "key"->"damDaHshaastiprajaaHsarvaaHdamDaevaabhiraxatidamDaHsupteShujaagartidamDamdharmamvidurbudhaaH"
+    )
+    val document = quoteDb.getDocument(jsonMap("key").toString)
+    updateDocument(document, jsonMap)
+  }
+
+  def testQuoteRetrieval() = {
+    val id = "damDaHshaastiprajaaHsarvaaHdamDaevaabhiraxatidamDaHsupteShujaagartidamDamdharmamvidurbudhaaH"
+    val doc = quoteDb.getDocument(id)
+    val jsonMap = doc.getUserProperties
+    log debug jsonMap.toString
+  }
 }
 
 
@@ -94,9 +137,15 @@ object dbMakerSanskrit {
   val quoteInfoDb = new QuoteInfoDb(language = Language("sa"))
 
   def main(args: Array[String]): Unit = {
-    quoteInfoDb.openDatabase()
-    quoteInfoDb.exportToTsv
-    // log info s"Updated records ${vishvasaPriyaSamskritaPadyani.map(quoteDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
-
+    quoteInfoDb.openDatabases()
+    quoteInfoDb.testQuoteWrite()
+    quoteInfoDb.testQuoteRetrieval()
+    quoteInfoDb.closeDatabases
+    quoteInfoDb.openDatabases()
+    quoteInfoDb.testQuoteRetrieval()
+    quoteInfoDb.testQuoteRetrieval()
+    // quoteInfoDb.checkConflicts
+//    quoteInfoDb.exportToTsv
+//    log info s"Updated records ${vishvasaPriyaSamskritaPadyani.take(1).map(quoteInfoDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
   }
 }
