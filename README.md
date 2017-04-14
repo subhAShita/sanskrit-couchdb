@@ -43,6 +43,6 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
   * Alternatives:
     * Couchbase database, since it can be [used in many](https://developer.couchbase.com/documentation/mobile/1.4/training/develop/using-the-database/index.html) mobile OS-s.
       * Current problems: Reading what was written with scala - [stackoverflow](http://stackoverflow.com/questions/43315540/couchbase-lite-retrieving-document-properties-after-reopening-database-yields) .
-    * Realm.io - good for storing plain Java objects via XML.
+    * Realm.io - good for storing plain Java objects via JSON.
     * Google Firebase for key-value storage - 1GB free.
 * Scala for the ingestion libraries (same justification as expressed [here](https://github.com/sanskrit-coders/sanskritnlpjava/blob/master/README.md#scala) ).
