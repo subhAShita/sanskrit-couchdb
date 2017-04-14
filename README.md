@@ -25,11 +25,14 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
 * I especially like online collections curated by some friends and myself:
   * since a book is not always available, and
   * I want to collect + easily access choice ones for future enjoyment.
-* But it is tedious (atleast for me) to sit in front of a computer to either:
- * read them,
- * or scour the internet for new ones
- * or collect favorites in a spreadsheet
- * or just annotate them with comments.
+* But it is tedious (atleast for me) to sit in front of a computer to do the following:
+    * read them,
+    * or scour the internet for new ones
+    * or collect favorites in a spreadsheet
+    * or just annotate them with comments.
+* So, it is desirable to:
+    * make the above as simple and easy as possible,
+    * and to share our collective labor so that we can benefit more easily from each others' work.
 
 # Technical choices
 * Use Nosql rather than a relational database as the primary canonical database.
