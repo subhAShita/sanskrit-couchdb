@@ -54,3 +54,12 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
     * Realm.io - good for storing plain Java objects via JSON.
     * Google Firebase for key-value storage - 1GB free.
 * Scala for the ingestion libraries (same justification as expressed [here](https://github.com/sanskrit-coders/sanskritnlpjava/blob/master/README.md#scala) ).
+
+# Code Contribution
+## Setup
+* Getting the code, put them in the same top-level directory for sanity.
+    * Clone this module.
+      * git clone --depth 1 git@github.com:sanskrit-coders/
+    * Also, this module depends on https://github.com/sanskrit-coders/sanskritnlpjava - so clone that as well.
+      * git clone --depth 1 git@github.com:sanskrit-coders/sanskritnlpjava.git
+* If you use intellij idea: The main intellij project files are located in sanskritnlpjava.
