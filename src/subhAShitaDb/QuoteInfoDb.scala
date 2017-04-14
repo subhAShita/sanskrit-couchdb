@@ -152,6 +152,7 @@ class QuoteInfoDb(language: Language) {
     val json = new databind.ObjectMapper().writeValueAsString(jsonMap)
     log debug jsonMap.toString
   }
+
 }
 
 
@@ -159,7 +160,7 @@ object dbMakerSanskrit {
   val log = LoggerFactory.getLogger(getClass.getName)
   val quoteInfoDb = new QuoteInfoDb(language = Language("sa"))
 
-  def main(args: Array[String]): Unit = {
+  def testQuoteReadWrite() = {
     quoteInfoDb.openDatabases()
     quoteInfoDb.testQuoteWrite()
     quoteInfoDb.testQuoteRetrieval()
@@ -167,8 +168,13 @@ object dbMakerSanskrit {
     quoteInfoDb.openDatabases()
     quoteInfoDb.testQuoteRetrieval()
     quoteInfoDb.testQuoteRetrieval()
+
+  }
+
+  def main(args: Array[String]): Unit = {
+    quoteInfoDb.openDatabases()
     // quoteInfoDb.checkConflicts
 //    quoteInfoDb.exportToTsv
-//    log info s"Updated records ${vishvasaPriyaSamskritaPadyani.take(1).map(quoteInfoDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
+    log info s"Updated records ${vishvasaPriyaSamskritaPadyani.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
   }
 }
