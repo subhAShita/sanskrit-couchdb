@@ -31,7 +31,7 @@ class QuoteInfoDb(language: Language) {
         new File(rootDirectoryPath)
       }
     }, Manager.DEFAULT_OPTIONS)
-    dbManager.setStorageType("ForestDB")
+//    dbManager.setStorageType("ForestDB")
     quoteDb = dbManager.getDatabase(s"quote_db__${language.code}")
     annotationDb = dbManager.getDatabase(s"annotation_db__${language.code}")
   }
