@@ -31,7 +31,7 @@ class QuoteInfoDb(language: Language) {
         new File(rootDirectoryPath)
       }
     }, Manager.DEFAULT_OPTIONS)
-//    dbManager.setStorageType("ForestDB")
+    dbManager.setStorageType("ForestDB")
     quoteDb = dbManager.getDatabase(s"quote_db__${language.code}")
     annotationDb = dbManager.getDatabase(s"annotation_db__${language.code}")
   }
@@ -55,12 +55,29 @@ class QuoteInfoDb(language: Language) {
     return jobj.values.asInstanceOf[Map[String,Object]]
   }
 
+  def toJava(x: Any): Any = {
+    import scala.collection.JavaConverters._
+    x match {
+      case y: scala.collection.MapLike[_, _, _] =>
+        y.map { case (d, v) => toJava(d) -> toJava(v) } asJava
+      case y: scala.collection.SetLike[_,_] =>
+        y map { item: Any => toJava(item) } asJava
+      case y: Iterable[_] =>
+        y.map { item: Any => toJava(item) } asJava
+      case y: Iterator[_] =>
+        toJava(y.toIterable)
+      case _ =>
+        x
+    }
+  }
+
   def updateDocument(document: Document, jsonMap: Map[String,Object]) = {
     document.update(new Document.DocumentUpdater() {
       override def update(newRevision: UnsavedRevision): Boolean = {
         val properties = newRevision.getUserProperties
-        log debug jsonMap.asJava.toString
-        properties.putAll(jsonMap.asJava)
+        val jsonMapJava = toJava(jsonMap).asInstanceOf[java.util.Map[String, Object]]
+//        log debug jsonMapJava.getClass.toString
+        properties.putAll(jsonMapJava)
         newRevision.setUserProperties(properties)
         true
       }
