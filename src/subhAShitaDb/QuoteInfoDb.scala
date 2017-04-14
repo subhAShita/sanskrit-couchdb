@@ -5,6 +5,7 @@ import java.io.File
 import scala.collection.JavaConversions.mapAsScalaMap
 import com.couchbase.lite.Document
 import com.couchbase.lite.UnsavedRevision
+
 import scala.collection.JavaConverters._
 import com.couchbase.lite.{Database, Document, JavaContext, Manager}
 import net.liftweb.json.{Extraction, Serialization, ShortTypeHints}
@@ -14,6 +15,8 @@ import com.couchbase.lite.Query
 import com.couchbase.lite.QueryEnumerator
 import com.couchbase.lite.QueryRow
 import com.couchbase.lite.util.Log
+import com.fasterxml.jackson.databind
+import com.fasterxml.jackson.databind.ObjectMapper
 
 // This version of the database uses Java (rather than Android) API.
 class QuoteInfoDb(language: Language) {
@@ -56,6 +59,7 @@ class QuoteInfoDb(language: Language) {
     document.update(new Document.DocumentUpdater() {
       override def update(newRevision: UnsavedRevision): Boolean = {
         val properties = newRevision.getUserProperties
+        log debug jsonMap.asJava.toString
         properties.putAll(jsonMap.asJava)
         newRevision.setUserProperties(properties)
         true
@@ -127,6 +131,8 @@ class QuoteInfoDb(language: Language) {
     val id = "damDaHshaastiprajaaHsarvaaHdamDaevaabhiraxatidamDaHsupteShujaagartidamDamdharmamvidurbudhaaH"
     val doc = quoteDb.getDocument(id)
     val jsonMap = doc.getUserProperties
+
+    val json = new databind.ObjectMapper().writeValueAsString(jsonMap)
     log debug jsonMap.toString
   }
 }
