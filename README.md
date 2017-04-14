@@ -17,8 +17,8 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
 
 ## Expected extensions
 * We hope that this will motivate other such long-sought-after universal databases for sanskrit connoiseurs, like: one for metres.
-* Similarly, one can build a collaboratively annotated and rated collection of verses/ sentences within the context of long sequential works (rather than free floating subhAShita-s).
 * The clients built for this database could serve as a model for other kAvya readers.
+  * Similarly, one can build a collaboratively annotated and rated collection of verses/ sentences within the context of long sequential works (rather than free floating subhAShita-s).
 
 ## Motivation
 * One of the greatest (and useful) pleasures I've had in tough times is retreat for a while into the world of beautiful subhAShita-s - and then burst back out like the vRtraghna armed with dadhIchi's bones.
@@ -33,6 +33,9 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
 * So, it is desirable to:
     * make the above as simple and easy as possible,
     * and to share our collective labor so that we can benefit more easily from each others' work.
+
+## A note for subhAShita collectors
+सङ्क्षेपेण - मानुषभाषाङ्कामप्य् अनवगच्छता यन्त्रेणापि "अस्यां सुभाषितावल्यां सन्तीमे सुभाषिताः। अमुकस्य सुभाषीतस्यैते विषयाः। अस्मिन् सुभाषीते कस्यचिदियं टिप्पणिः। सुभाषितमिदम् अस्मै ५/५ इति मानेन रोचते। अपरस्मै ३/५ इति मानेन। अस्य सुभाषितस्य लेखकोऽसौ।" इति ग्राह्यं स्यात्। तेन पाठकानुकूलं संलक्ष्य भवितुमर्हति सङ्ग्रहस्य यान्त्रिक-प्रस्तुतिः।
 
 # Technical choices
 * Use Nosql rather than a relational database as the primary canonical database.
