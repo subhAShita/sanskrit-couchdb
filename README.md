@@ -1,6 +1,6 @@
 # Introduction
 ## Goal
-We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/wiki/Subhashita) -s** which is:
+We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/wiki/Subhashita)-s (= worthy quotes)** which is:
 * **Universal**
     * Its goal is to contain within it **every worthy subhAShita** ever composed.
     * In fact, the ambition encompasses all *languages*, *verse* and *prose* forms.
@@ -35,7 +35,9 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
     * and to share our collective labor so that we can benefit more easily from each others' work.
 
 ## A note for subhAShita collectors
-सङ्क्षेपेण - मानुषभाषाङ्कामप्य् अनवगच्छता यन्त्रेणापि "अस्यां सुभाषितावल्यां सन्तीमे सुभाषिताः। अमुकस्य सुभाषीतस्यैते विषयाः। अस्मिन् सुभाषीते कस्यचिदियं टिप्पणिः। सुभाषितमिदम् अस्मै ५/५ इति मानेन रोचते। अपरस्मै ३/५ इति मानेन। अस्य सुभाषितस्य लेखकोऽसौ।" इति ग्राह्यं स्यात्। तेन पाठकानुकूलं संलक्ष्य भवितुमर्हति सङ्ग्रहस्य यान्त्रिक-प्रस्तुतिः।
+* Are you a collector of subhAShita-s? Would you like to contribute your collection to the database? You're very welcome!
+* But you should make your collection available in such a way that a machine which does not know human languages can distinguish individual quotes, ratings and various other details.
+* सङ्क्षेपेण - मानुषभाषाङ्कामप्य् अनवगच्छता यन्त्रेणापि "अस्यां सुभाषितावल्यां सन्तीमे सुभाषिताः। अमुकस्य सुभाषीतस्यैते विषयाः। अस्मिन् सुभाषीते कस्यचिदियं टिप्पणिः। सुभाषितमिदम् अस्मै ५/५ इति मानेन रोचते। अपरस्मै ३/५ इति मानेन। अस्य सुभाषितस्य लेखकोऽसौ।" इति ग्राह्यं स्यात्। तेन पाठकानुकूलं संलक्ष्य भवितुमर्हति सङ्ग्रहस्य यान्त्रिक-प्रस्तुतिः।
 
 # Technical choices
 * Use Nosql rather than a relational database as the primary canonical database.
