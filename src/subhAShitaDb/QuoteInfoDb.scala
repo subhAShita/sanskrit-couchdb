@@ -24,7 +24,7 @@ class QuoteInfoDb(language: Language) {
   var quoteDb: Database = null
   var annotationDb: Database = null
   var dbManager: Manager = null
-  def openDatabases() = {
+  def openDatabasesLaptop() = {
     dbManager =  new Manager(new JavaContext("data") {
       override def getRootDirectory: File = {
         val rootDirectoryPath = "/home/vvasuki/subhAShita-db-sanskrit"
@@ -163,17 +163,17 @@ object dbMakerSanskrit {
   val quoteInfoDb = new QuoteInfoDb(language = Language("sa"))
 
   def testQuoteReadWrite() = {
-    quoteInfoDb.openDatabases()
+    quoteInfoDb.openDatabasesLaptop()
     quoteInfoDb.testQuoteWrite()
     quoteInfoDb.testQuoteRetrieval()
     quoteInfoDb.closeDatabases
-    quoteInfoDb.openDatabases()
+    quoteInfoDb.openDatabasesLaptop()
     quoteInfoDb.testQuoteRetrieval()
     quoteInfoDb.testQuoteRetrieval()
   }
 
   def main(args: Array[String]): Unit = {
-    quoteInfoDb.openDatabases()
+    quoteInfoDb.openDatabasesLaptop()
     // quoteInfoDb.checkConflicts
 //    quoteInfoDb.exportToTsv
 //    log info s"Updated records ${vishvasaPriyaSamskritaPadyani.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
