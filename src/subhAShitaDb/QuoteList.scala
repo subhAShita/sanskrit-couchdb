@@ -8,16 +8,42 @@ import org.apache.commons.csv.{CSVFormat, CSVRecord, QuoteMode}
 import org.slf4j.LoggerFactory
 import sanskritnlp.quote.{TopicAnnotation, _}
 import sanskritnlp.transliteration.transliterator
+import subhAShitaDb.vishvasaPriyaSamskritaPadyani.getClass
 
 abstract class QuoteList(val fileName: String, val id: String) extends Iterator[QuoteWithInfo] {
   var csvReader = new FileReader(fileName)
+  // Assumes TSV file by default. Uses first line as header.
   var records: util.Iterator[CSVRecord] =
     CSVFormat.TDF.withFirstRecordAsHeader.withIgnoreEmptyLines.parse(csvReader).iterator()
   val source: Source = null
 
   override def hasNext: Boolean = records.hasNext
-
 }
+
+object mahAsubhAShitasangraha
+  extends QuoteList(
+    fileName = "/home/vvasuki/subhAShita-db-sanskrit/mUlAni/mahA-subhAShita-sangraha/mahA-subhAShita-sangraha_1_per_line_dev.txt",
+    id = "महा-सुभाषित-सङ्ग्रहः") {
+    val log = LoggerFactory.getLogger(getClass.getName)
+    override val source = sourceHelper.getSanskritDevanaagariiSource("महा-सुभाषित-सङ्ग्रहः", "स्टेय्न्बाक्-लुड्विगः"::Nil)
+
+    def next(): QuoteWithInfo = {
+      val record = records.next()
+      log debug record.toMap.toString
+      val quoteText = QuoteText(
+        ScriptRendering(text = record.get("सुभाषितम्"), scheme = transliterator.scriptDevanAgarI)::Nil,
+        language = Language("sa"))
+      val quoteId = record.get("ID").replace("MSS_", "महा-सुभाषित-सङ्ग्रहे ")
+      val referenceAnnotations = ReferenceAnnotation(
+        textKey=quoteText.key, source,
+        new QuoteText(text = quoteId))::Nil
+      val subhashita = QuoteWithInfo(quoteText,
+        referenceAnnotations = referenceAnnotations
+      )
+      return subhashita
+    }
+  }
+
 
 object vishvasaPriyaSamskritaPadyani
   extends QuoteList(
@@ -28,7 +54,7 @@ object vishvasaPriyaSamskritaPadyani
 
   def next(): QuoteWithInfo = {
     val record = records.next()
-    log debug record.toMap.toString
+//    log debug record.toMap.toString
     if (record.get("भाषा") == "" || record.get("भाषा") == "संस्कृतम्") {
       val quoteText = QuoteText(
         ScriptRendering(text = record.get("सुभाषितम्"), scheme = transliterator.scriptDevanAgarI)::Nil,
@@ -38,7 +64,7 @@ object vishvasaPriyaSamskritaPadyani
       if (record.get("विवरणम्").nonEmpty) {
         descriptionAnnotations = DescriptionAnnotation(
           textKey=quoteText.key, source,
-          QuoteWithInfo(new QuoteText(text = record.get("विवरणम्"))))::Nil
+          new QuoteText(text = record.get("विवरणम्")))::Nil
       }
 
       var originAnnotations  = List[OriginAnnotation]()

@@ -96,7 +96,7 @@ class QuoteInfoDb(language: Language) {
   def addAnnotation(annotation: Annotation): Boolean = {
     val jsonMap = getJsonMap(annotation)
 //    log debug(annotation.getKey())
-//    log debug(jsonMap.toString())
+    log debug(jsonMap.toString())
     val document = annotationDb.getDocument(annotation.getKey())
     updateDocument(document, jsonMap)
     return true
@@ -108,8 +108,10 @@ class QuoteInfoDb(language: Language) {
     recordsModified += addQuote(quoteWithInfo.quoteText).compare(false)
     recordsModified += quoteWithInfo.topicAnnotations.map(addAnnotation(_).compare(false)).sum
     recordsModified += quoteWithInfo.descriptionAnnotations.map(addAnnotation(_).compare(false)).sum
-    recordsModified += quoteWithInfo.originAnnotations.map(addAnnotation(_).compare(false)).sum
     recordsModified += quoteWithInfo.ratingAnnotations.map(addAnnotation(_).compare(false)).sum
+    recordsModified += quoteWithInfo.originAnnotations.map(addAnnotation(_).compare(false)).sum
+    recordsModified += quoteWithInfo.requestAnnotations.map(addAnnotation(_).compare(false)).sum
+    recordsModified += quoteWithInfo.referenceAnnotations.map(addAnnotation(_).compare(false)).sum
     return recordsModified
   }
 
@@ -168,13 +170,13 @@ object dbMakerSanskrit {
     quoteInfoDb.openDatabases()
     quoteInfoDb.testQuoteRetrieval()
     quoteInfoDb.testQuoteRetrieval()
-
   }
 
   def main(args: Array[String]): Unit = {
     quoteInfoDb.openDatabases()
     // quoteInfoDb.checkConflicts
 //    quoteInfoDb.exportToTsv
-    log info s"Updated records ${vishvasaPriyaSamskritaPadyani.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
+//    log info s"Updated records ${vishvasaPriyaSamskritaPadyani.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
+    log info s"Updated records ${mahAsubhAShitasangraha.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from mahAsubhAShitasangraha"
   }
 }
