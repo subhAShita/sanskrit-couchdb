@@ -8,7 +8,7 @@ import com.couchbase.lite.UnsavedRevision
 
 import scala.collection.JavaConverters._
 import com.couchbase.lite.{Database, Document, JavaContext, Manager}
-import net.liftweb.json.{Extraction, Serialization, ShortTypeHints}
+import net.liftweb.json.{Extraction, Serialization, ShortTypeHints, compactRender}
 import org.slf4j.LoggerFactory
 import sanskritnlp.quote.{TopicAnnotation, _}
 import com.couchbase.lite.Query
@@ -133,6 +133,7 @@ class QuoteInfoDb(language: Language) {
       // val jsonMap = row.getDocument.getUserProperties.asScala("language").asInstanceOf[java.util.Map[String, Object]].asScala
       val jsonMap = quoteDb.getDocument(id).getUserProperties
       log debug jsonMap.toString
+//      log debug compactRender(jsonMap))
     })
   }
 
@@ -175,7 +176,7 @@ object dbMakerSanskrit {
   def main(args: Array[String]): Unit = {
     quoteInfoDb.openDatabasesLaptop()
     // quoteInfoDb.checkConflicts
-//    quoteInfoDb.exportToTsv
+    quoteInfoDb.exportToTsv
 //    log info s"Updated records ${vishvasaPriyaSamskritaPadyani.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
     log info s"Updated records ${mahAsubhAShitasangraha.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from mahAsubhAShitasangraha"
   }
