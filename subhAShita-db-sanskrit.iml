@@ -14,12 +14,9 @@
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:0.9.29" level="project" />
     <orderEntry type="library" name="org.apache.commons:commons-csv:1.4" level="project" />
     <orderEntry type="library" name="Maven: com.thoughtworks.paranamer:paranamer:2.7" level="project" />
-    <orderEntry type="library" name="com.couchbase.lite:couchbase-lite-java-forestdb:1.4.0" level="project" />
     <orderEntry type="library" name="com.couchbase.lite:couchbase-lite-java:1.4.0" level="project" />
+    <orderEntry type="library" name="com.couchbase.lite:couchbase-lite-java-forestdb:1.4.0" level="project" />
     <orderEntry type="library" name="org.json4s:json4s_2.11:3.2.11" level="project" />
-    <orderEntry type="library" name="org.json4s:json4s-native_2.11:3.5.1" level="project" />
-    <orderEntry type="library" name="org.json4s:json4s-jackson_2.11:3.5.1" level="project" />
-    <orderEntry type="library" name="com.fasterxml.jackson.core:jackson-core:2.8.8" level="project" />
-    <orderEntry type="library" name="com.fasterxml.jackson.core:jackson-annotations:2.8.8" level="project" />
+    <orderEntry type="library" name="org.json4s:json4s-native_2.11:3.2.11" level="project" />
   </component>
 </module>
