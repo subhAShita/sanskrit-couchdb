@@ -3,12 +3,10 @@ package subhAShitaDb
 import java.io.FileReader
 import java.util
 
-import net.liftweb.json.Serialization
-import org.apache.commons.csv.{CSVFormat, CSVRecord, QuoteMode}
+import org.apache.commons.csv.{CSVFormat, CSVRecord}
 import org.slf4j.LoggerFactory
 import sanskritnlp.quote.{TopicAnnotation, _}
 import sanskritnlp.transliteration.transliterator
-import subhAShitaDb.vishvasaPriyaSamskritaPadyani.getClass
 
 abstract class QuoteList(val fileName: String, val id: String) extends Iterator[QuoteWithInfo] {
   var csvReader = new FileReader(fileName)

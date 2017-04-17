@@ -2,21 +2,14 @@ package subhAShitaDb
 
 import java.io.File
 
-import scala.collection.JavaConversions.mapAsScalaMap
-import com.couchbase.lite.Document
-import com.couchbase.lite.UnsavedRevision
-
-import scala.collection.JavaConverters._
-import com.couchbase.lite.{Database, Document, JavaContext, Manager}
-import net.liftweb.json.{Extraction, Serialization, ShortTypeHints, compactRender}
+import com.couchbase.lite.{Database, Manager, JavaContext, Document, UnsavedRevision, Query, ManagerOptions}
+import com.couchbase.lite.util.Log
+import org.json4s._
+import org.json4s.native.Serialization
 import org.slf4j.LoggerFactory
 import sanskritnlp.quote.{TopicAnnotation, _}
-import com.couchbase.lite.Query
-import com.couchbase.lite.QueryEnumerator
-import com.couchbase.lite.QueryRow
-import com.couchbase.lite.util.Log
-import com.fasterxml.jackson.databind
-import com.fasterxml.jackson.databind.ObjectMapper
+
+import scala.collection.JavaConverters._
 
 // This version of the database uses Java (rather than Android) API.
 class QuoteInfoDb(language: Language) {
@@ -127,13 +120,22 @@ class QuoteInfoDb(language: Language) {
   }
 
   def exportToTsv = {
+    implicit val formats = Serialization.formats(ShortTypeHints(
+      List(
+        classOf[QuoteText],
+        classOf[OriginAnnotation],
+        classOf[DescriptionAnnotation],
+        classOf[TopicAnnotation],
+        classOf[RatingAnnotation]
+      )))
     val query = quoteDb.createAllDocumentsQuery
     val result = query.run
     result.iterator().asScala.map(_.getDocumentId).foreach(id => {
       // val jsonMap = row.getDocument.getUserProperties.asScala("language").asInstanceOf[java.util.Map[String, Object]].asScala
       val jsonMap = quoteDb.getDocument(id).getUserProperties
       log debug jsonMap.toString
-//      log debug compactRender(jsonMap))
+      val json = Serialization.write(jsonMap)
+      log debug json
     })
   }
 
@@ -152,7 +154,6 @@ class QuoteInfoDb(language: Language) {
     val doc = quoteDb.getDocument(id)
     val jsonMap = doc.getUserProperties
 
-    val json = new databind.ObjectMapper().writeValueAsString(jsonMap)
     log debug jsonMap.toString
   }
 
@@ -178,6 +179,6 @@ object dbMakerSanskrit {
     // quoteInfoDb.checkConflicts
     quoteInfoDb.exportToTsv
 //    log info s"Updated records ${vishvasaPriyaSamskritaPadyani.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
-    log info s"Updated records ${mahAsubhAShitasangraha.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from mahAsubhAShitasangraha"
+//    log info s"Updated records ${mahAsubhAShitasangraha.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from mahAsubhAShitasangraha"
   }
 }
