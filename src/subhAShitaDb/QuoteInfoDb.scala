@@ -84,6 +84,10 @@ class QuoteInfoDb(language: Language) {
     return recordsModified
   }
 
+  def ingestQuoteList(quoteList: QuoteList) = {
+    log info s"Updated records ${quoteList.map(addQuoteWithInfo(_)).sum} from ${quoteList.getClass.getSimpleName}"
+  }
+
   def checkConflicts = {
     val query = quoteDb.createAllDocumentsQuery
     query.setAllDocsMode(Query.AllDocsMode.ONLY_CONFLICTS)
@@ -95,19 +99,23 @@ class QuoteInfoDb(language: Language) {
     })
   }
 
-  def listQuotes = {
-    val query = quoteDb.createAllDocumentsQuery
+  def listCaseClassObjects(query: Query) = {
     val result = query.run
-    val quotes = result.iterator().asScala.map(_.getDocument).map(doc => {
+    val docObjects = result.iterator().asScala.map(_.getDocument).map(doc => {
       val jsonMap = collectionUtils.toScala(doc.getUserProperties).asInstanceOf[mutable.Map[String, _]]
-//      val jsonMap = doc.getUserProperties
-      quoteTextHelper.fromJsonMap(jsonMap)
+      //      val jsonMap = doc.getUserProperties
+      jsonHelper.fromJsonMap(jsonMap)
     })
-//    log info s"We have ${quotes.length} quotes."
-    quotes.foreach(quoteText => {
+    //    log info s"We have ${quotes.length} quotes."
+    docObjects.foreach(quoteText => {
       log info quoteText.toString
       log info jsonHelper.getJsonMap(quoteText).toString()
     })
+  }
+
+  def listAllCaseClassObjects = {
+//    listCaseClassObjects(quoteDb.createAllDocumentsQuery)
+    listCaseClassObjects(annotationDb.createAllDocumentsQuery)
   }
 
   def testQuoteWrite() = {
@@ -145,11 +153,16 @@ object dbMakerSanskrit {
     quoteInfoDb.testQuoteRetrieval()
   }
 
+  def updateDb = {
+//    quoteInfoDb.ingestQuoteList(vishvasaPriyaSamskritaPadyani)
+    quoteInfoDb.ingestQuoteList(mahAsubhAShitasangraha)
+  }
+
+
   def main(args: Array[String]): Unit = {
     quoteInfoDb.openDatabasesLaptop()
     // quoteInfoDb.checkConflicts
-    quoteInfoDb.listQuotes
-//    log info s"Updated records ${vishvasaPriyaSamskritaPadyani.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
-//    log info s"Updated records ${mahAsubhAShitasangraha.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from mahAsubhAShitasangraha"
+    updateDb
+//    quoteInfoDb.listAllCaseClassObjects
   }
 }
