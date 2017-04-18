@@ -95,14 +95,19 @@ class QuoteInfoDb(language: Language) {
     })
   }
 
-  def exportToTsv = {
+  def listQuotes = {
     val query = quoteDb.createAllDocumentsQuery
     val result = query.run
-    result.iterator().asScala.take(1).map(_.getDocument).map(doc => {
+    val quotes = result.iterator().asScala.map(_.getDocument).map(doc => {
       val jsonMap = collectionUtils.toScala(doc.getUserProperties).asInstanceOf[mutable.Map[String, _]]
 //      val jsonMap = doc.getUserProperties
       quoteTextHelper.fromJsonMap(jsonMap)
-    }).foreach(log info jsonHelper.getJsonMap(_).toString())
+    })
+//    log info s"We have ${quotes.length} quotes."
+    quotes.foreach(quoteText => {
+      log info quoteText.toString
+      log info jsonHelper.getJsonMap(quoteText).toString()
+    })
   }
 
   def testQuoteWrite() = {
@@ -143,7 +148,7 @@ object dbMakerSanskrit {
   def main(args: Array[String]): Unit = {
     quoteInfoDb.openDatabasesLaptop()
     // quoteInfoDb.checkConflicts
-    quoteInfoDb.exportToTsv
+    quoteInfoDb.listQuotes
 //    log info s"Updated records ${vishvasaPriyaSamskritaPadyani.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from vishvasaPriyaSamskritaPadyani"
 //    log info s"Updated records ${mahAsubhAShitasangraha.map(quoteInfoDb.addQuoteWithInfo(_)).sum} from mahAsubhAShitasangraha"
   }
