@@ -162,7 +162,7 @@ object dbMakerSanskrit {
   def main(args: Array[String]): Unit = {
     quoteInfoDb.openDatabasesLaptop()
     // quoteInfoDb.checkConflicts
-    updateDb
-//    quoteInfoDb.listAllCaseClassObjects
+//    updateDb
+    quoteInfoDb.listAllCaseClassObjects
   }
 }

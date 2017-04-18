@@ -31,10 +31,10 @@ object mahAsubhAShitasangraha
       val quoteText = QuoteText(
         ScriptRendering(text = record.get("सुभाषितम्"), scheme = transliterator.scriptDevanAgarI)::Nil,
         language = Language("sa"))
-      val quoteId = record.get("ID").replace("MSS_", "महा-सुभाषित-सङ्ग्रहे ")
+      val quoteId = transliterator.transliterate(record.get("ID").replace("MSS_", "महा-सुभाषित-सङ्ग्रहे "), sourceScheme = "iast", destScheme = transliterator.scriptDevanAgarI)
       val referenceAnnotations = ReferenceAnnotation(
-        textKey=quoteText.key, source,
-        new QuoteText(text = quoteId))::Nil
+        textKey=quoteText.key, source = source,
+        reference = quoteTextHelper.getSanskritDevangariiQuote(quoteId))::Nil
       val subhashita = QuoteWithInfo(quoteText,
         referenceAnnotations = referenceAnnotations
       )
