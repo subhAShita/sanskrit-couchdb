@@ -2,6 +2,10 @@ package subhAShitaDb
 
 import java.io.File
 
+import sanskritnlp.utils.collectionUtils
+
+import scala.collection.mutable
+
 //import com.couchbase.lite.{Database, Manager, JavaContext, Document, UnsavedRevision, Query, ManagerOptions}
 import com.couchbase.lite.{Database, Manager, JavaContext, Document, UnsavedRevision, Query, ManagerOptions}
 import com.couchbase.lite.util.Log
@@ -36,41 +40,11 @@ class QuoteInfoDb(language: Language) {
     annotationDb.close()
   }
 
-  def getJsonMap(caseObj: Any): Map[String,Object] = {
-    // implicit val formats = Serialization.formats(NoTypeHints)
-    implicit val formats = Serialization.formats(ShortTypeHints(
-      List(
-        classOf[QuoteText],
-        classOf[OriginAnnotation],
-        classOf[DescriptionAnnotation],
-        classOf[TopicAnnotation],
-        classOf[RatingAnnotation]
-      )))
-    val jobj = Extraction.decompose(caseObj)
-    return jobj.values.asInstanceOf[Map[String,Object]]
-  }
-
-  def toJava(x: Any): Any = {
-    import scala.collection.JavaConverters._
-    x match {
-      case y: scala.collection.MapLike[_, _, _] =>
-        y.map { case (d, v) => toJava(d) -> toJava(v) } asJava
-      case y: scala.collection.SetLike[_,_] =>
-        y map { item: Any => toJava(item) } asJava
-      case y: Iterable[_] =>
-        y.map { item: Any => toJava(item) } asJava
-      case y: Iterator[_] =>
-        toJava(y.toIterable)
-      case _ =>
-        x
-    }
-  }
-
   def updateDocument(document: Document, jsonMap: Map[String,Object]) = {
     document.update(new Document.DocumentUpdater() {
       override def update(newRevision: UnsavedRevision): Boolean = {
         val properties = newRevision.getUserProperties
-        val jsonMapJava = toJava(jsonMap).asInstanceOf[java.util.Map[String, Object]]
+        val jsonMapJava = collectionUtils.toJava(jsonMap).asInstanceOf[java.util.Map[String, Object]]
 //        log debug jsonMapJava.getClass.toString
         properties.putAll(jsonMapJava)
         newRevision.setUserProperties(properties)
@@ -80,7 +54,7 @@ class QuoteInfoDb(language: Language) {
   }
 
   def addQuote(quoteText: QuoteText) : Boolean = {
-    val jsonMap = getJsonMap(quoteText)
+    val jsonMap = jsonHelper.getJsonMap(quoteText)
      log debug(jsonMap.toString())
 //    sys.exit()
     val document = quoteDb.getDocument(quoteText.key)
@@ -89,7 +63,7 @@ class QuoteInfoDb(language: Language) {
   }
 
   def addAnnotation(annotation: Annotation): Boolean = {
-    val jsonMap = getJsonMap(annotation)
+    val jsonMap = jsonHelper.getJsonMap(annotation)
 //    log debug(annotation.getKey())
     log debug(jsonMap.toString())
     val document = annotationDb.getDocument(annotation.getKey())
@@ -122,23 +96,13 @@ class QuoteInfoDb(language: Language) {
   }
 
   def exportToTsv = {
-    implicit val formats = Serialization.formats(ShortTypeHints(
-      List(
-        classOf[QuoteText],
-        classOf[OriginAnnotation],
-        classOf[DescriptionAnnotation],
-        classOf[TopicAnnotation],
-        classOf[RatingAnnotation]
-      )))
     val query = quoteDb.createAllDocumentsQuery
     val result = query.run
-    result.iterator().asScala.map(_.getDocumentId).foreach(id => {
-      // val jsonMap = row.getDocument.getUserProperties.asScala("language").asInstanceOf[java.util.Map[String, Object]].asScala
-      val jsonMap = quoteDb.getDocument(id).getUserProperties
-      log debug jsonMap.toString
-      val json = Serialization.write(jsonMap)
-      log debug json
-    })
+    result.iterator().asScala.take(1).map(_.getDocument).map(doc => {
+      val jsonMap = collectionUtils.toScala(doc.getUserProperties).asInstanceOf[mutable.Map[String, _]]
+//      val jsonMap = doc.getUserProperties
+      quoteTextHelper.fromJsonMap(jsonMap)
+    }).foreach(log info jsonHelper.getJsonMap(_).toString())
   }
 
   def testQuoteWrite() = {
