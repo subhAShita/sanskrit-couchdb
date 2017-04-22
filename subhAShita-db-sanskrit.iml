@@ -8,15 +8,15 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="scala-sdk-2.11.8" level="application" />
-    <orderEntry type="module" module-name="sanskritnlp" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
-    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:0.9.29" level="project" />
-    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:0.9.29" level="project" />
-    <orderEntry type="library" name="org.apache.commons:commons-csv:1.4" level="project" />
-    <orderEntry type="library" name="Maven: com.thoughtworks.paranamer:paranamer:2.7" level="project" />
-    <orderEntry type="library" name="com.couchbase.lite:couchbase-lite-java:1.4.0" level="project" />
-    <orderEntry type="library" name="com.couchbase.lite:couchbase-lite-java-forestdb:1.4.0" level="project" />
-    <orderEntry type="library" name="org.json4s:json4s_2.11:3.2.11" level="project" />
-    <orderEntry type="library" name="org.json4s:json4s-native_2.11:3.2.11" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="application" />
+    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:0.9.29" level="application" />
+    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:0.9.29" level="application" />
+    <orderEntry type="library" name="org.apache.commons:commons-csv:1.4" level="application" />
+    <orderEntry type="library" name="Maven: com.thoughtworks.paranamer:paranamer:2.7" level="application" />
+    <orderEntry type="library" name="com.couchbase.lite:couchbase-lite-java:1.4.0" level="application" />
+    <orderEntry type="library" name="com.couchbase.lite:couchbase-lite-java-forestdb:1.4.0" level="application" />
+    <orderEntry type="library" name="Maven: org.json4s:json4s_2.11:3.2.11" level="application" />
+    <orderEntry type="library" name="Maven: org.json4s:json4s-native_2.11:3.2.11" level="application" />
+    <orderEntry type="library" name="com.github.sanskrit-coders:sanskritnlp:1.1" level="application" />
   </component>
 </module>
