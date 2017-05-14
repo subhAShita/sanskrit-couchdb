@@ -18,7 +18,7 @@ import sanskritnlp.quote.{TopicAnnotation, _}
 import scala.collection.JavaConverters._
 
 // This version of the database uses Java (rather than Android) API.
-class QuoteInfoDb(language: Language) {
+class QuoteInfoCouchbaseLiteDb(language: Language) {
   val log = LoggerFactory.getLogger(getClass.getName)
   var quoteDb: Database = null
   var annotationDb: Database = null
@@ -141,7 +141,7 @@ class QuoteInfoDb(language: Language) {
 
 object dbMakerSanskrit {
   val log = LoggerFactory.getLogger(getClass.getName)
-  val quoteInfoDb = new QuoteInfoDb(language = Language("sa"))
+  val quoteInfoDb = new QuoteInfoCouchbaseLiteDb(language = Language("sa"))
 
   def testQuoteReadWrite() = {
     quoteInfoDb.openDatabasesLaptop()
