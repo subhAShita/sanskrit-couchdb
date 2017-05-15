@@ -2,18 +2,15 @@ package subhAShitaDb
 
 import java.io.File
 
-import sanskritnlp.utils.collectionUtils
+import subhAShitaDb.utils.collectionUtils
 
 import scala.collection.mutable
 
 //import com.couchbase.lite.{Database, Manager, JavaContext, Document, UnsavedRevision, Query, ManagerOptions}
-import com.couchbase.lite.{Database, Manager, JavaContext, Document, UnsavedRevision, Query, ManagerOptions}
 import com.couchbase.lite.util.Log
-import org.json4s._
-import org.json4s.native.Serialization
+import com.couchbase.lite._
 //import org.json4s.jackson.Serialization
 import org.slf4j.LoggerFactory
-import sanskritnlp.quote.{TopicAnnotation, _}
 
 import scala.collection.JavaConverters._
 

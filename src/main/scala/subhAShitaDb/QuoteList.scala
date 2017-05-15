@@ -5,7 +5,6 @@ import java.util
 
 import org.apache.commons.csv.{CSVFormat, CSVRecord}
 import org.slf4j.LoggerFactory
-import sanskritnlp.quote.{TopicAnnotation, _}
 import sanskritnlp.transliteration.transliterator
 
 abstract class QuoteList(val fileName: String, val id: String) extends Iterator[QuoteWithInfo] {
