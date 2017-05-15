@@ -8,7 +8,7 @@ import scala.collection.mutable
 
 //import com.couchbase.lite.{Database, Manager, JavaContext, Document, UnsavedRevision, Query, ManagerOptions}
 import com.couchbase.lite.util.Log
-import com.couchbase.lite._
+import com.couchbase.lite.{Database, Manager, JavaContext, Document, UnsavedRevision, Query, ManagerOptions}
 //import org.json4s.jackson.Serialization
 import org.slf4j.LoggerFactory
 
