@@ -48,9 +48,9 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
     * distributed nature: ability to operate at any scale.
       * Database copies can sync with each other easily - no centralization is good.
   * Comparison [here](http://db-engines.com/en/system/Cassandra%3BCouchbase%3BMongoDB%3BRedis) .
-  * Alternatives:
+  * Alternatives for mobile offline use:
     * Couchbase database, since it can be [used in many](https://developer.couchbase.com/documentation/mobile/1.4/training/develop/using-the-database/index.html) mobile OS-s.
-      * Current problems: Reading what was written with scala - [stackoverflow](http://stackoverflow.com/questions/43315540/couchbase-lite-retrieving-document-properties-after-reopening-database-yields) .
+      * Comparison with mongodb: [on cb site](https://www.couchbase.com/comparing-couchbase-vs-mongodb).
     * Realm.io - good for storing plain Java objects via JSON.
     * Google Firebase for key-value storage - 1GB free.
 * Scala for the ingestion libraries (same justification as expressed [here](https://github.com/sanskrit-coders/sanskritnlpjava/blob/master/README.md#scala) ).
