@@ -25,6 +25,7 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.5.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.oxo42:stateless4j:2.4.0" level="project" />
     <orderEntry type="library" name="Maven: com.couchbase.lite:couchbase-lite-java-sqlite-custom:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: com.couchbase.lite:couchbase-lite-java-forestdb:1.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.json4s:json4s_2.11:3.2.11" level="project" />
     <orderEntry type="library" name="Maven: org.json4s:json4s-native_2.11:3.2.11" level="project" />
     <orderEntry type="library" name="Maven: org.json4s:json4s-core_2.11:3.2.11" level="project" />

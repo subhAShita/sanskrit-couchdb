@@ -1,10 +1,13 @@
 package subhAShitaDb
 
 import java.io.File
+import java.net.URL
 
+import com.couchbase.lite.auth.BasicAuthenticator
 import subhAShitaDb.utils.collectionUtils
 
 import scala.collection.mutable
+import scala.io.StdIn
 
 //import com.couchbase.lite.{Database, Manager, JavaContext, Document, UnsavedRevision, Query, ManagerOptions}
 import com.couchbase.lite.util.Log
@@ -20,6 +23,9 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
   var quoteDb: Database = null
   var annotationDb: Database = null
   var dbManager: Manager = null
+  val replicationUrl = "http://127.0.0.1:5984/"
+  var replicationPw = ""
+
   def openDatabasesLaptop() = {
     dbManager =  new Manager(new JavaContext("data") {
       override def getRootDirectory: File = {
@@ -29,8 +35,45 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
     }, Manager.DEFAULT_OPTIONS)
     dbManager.setStorageType("ForestDB")
     quoteDb = dbManager.getDatabase(s"quote_db__${language.code}")
-    annotationDb = dbManager.getDatabase(s"annotation_db__${language.code}")
+    annotationDb = dbManager.getDatabase(s"quote_annotation_db__${language.code}")
   }
+
+  def replicate(database: Database) = {
+    import com.couchbase.lite.replicator.Replication
+    val url = new URL(replicationUrl + database.getName)
+    log.info("replicating to " + url.toString())
+    if (replicationPw.isEmpty) {
+      log info "Enter password"
+      replicationPw = StdIn.readLine().trim
+    }
+    val auth = new BasicAuthenticator("vvasuki", replicationPw)
+
+    val push = database.createPushReplication(url)
+    push.setAuthenticator(auth)
+    //    push.setContinuous(true)
+    push.addChangeListener(new Replication.ChangeListener() {
+      override def changed(event: Replication.ChangeEvent): Unit = {
+        log.info(event.toString)
+      }
+    })
+    push.start
+
+    val pull = database.createPullReplication(url)
+//    pull.setContinuous(true)
+    pull.setAuthenticator(auth)
+    pull.addChangeListener(new Replication.ChangeListener() {
+      override def changed(event: Replication.ChangeEvent): Unit = {
+        log.info(event.toString)
+      }
+    })
+    pull.start
+  }
+
+  def replicateAll() = {
+    replicate(quoteDb)
+    replicate(annotationDb)
+  }
+
 
   def closeDatabases = {
     quoteDb.close()
@@ -155,11 +198,11 @@ object dbMakerSanskrit {
     quoteInfoDb.ingestQuoteList(mahAsubhAShitasangraha)
   }
 
-
   def main(args: Array[String]): Unit = {
     quoteInfoDb.openDatabasesLaptop()
     // quoteInfoDb.checkConflicts
 //    updateDb
-    quoteInfoDb.listAllCaseClassObjects
+//    quoteInfoDb.listAllCaseClassObjects
+    quoteInfoDb.replicateAll()
   }
 }
