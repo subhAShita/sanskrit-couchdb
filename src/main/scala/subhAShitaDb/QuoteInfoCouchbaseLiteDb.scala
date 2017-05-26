@@ -5,6 +5,7 @@ import java.net.URL
 
 import com.couchbase.lite.auth.BasicAuthenticator
 import subhAShitaDb.utils.collectionUtils
+import dbSchema._
 
 import scala.collection.mutable
 import scala.io.StdIn

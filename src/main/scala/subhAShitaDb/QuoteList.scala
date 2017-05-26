@@ -3,6 +3,7 @@ package subhAShitaDb
 import java.io.FileReader
 import java.util
 
+import dbSchema._
 import org.apache.commons.csv.{CSVFormat, CSVRecord}
 import org.slf4j.LoggerFactory
 import sanskritnlp.transliteration.transliterator
