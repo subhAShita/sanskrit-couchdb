@@ -6,6 +6,9 @@ import java.net.URL
 import com.couchbase.lite.auth.BasicAuthenticator
 import subhAShitaDb.utils.collectionUtils
 import dbSchema._
+import dbSchema.common.Language
+import dbSchema.quote.{Annotation, QuoteText, QuoteWithInfo}
+import dbUtils.jsonHelper
 
 import scala.collection.mutable
 import scala.io.StdIn
@@ -28,7 +31,7 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
   var replicationPw = ""
 
   def openDatabasesLaptop() = {
-    dbManager =  new Manager(new JavaContext("data") {
+    dbManager = new Manager(new JavaContext("data") {
       override def getRootDirectory: File = {
         val rootDirectoryPath = "/home/vvasuki/subhAShita-db-sanskrit"
         new File(rootDirectoryPath)
@@ -60,7 +63,7 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
     push.start
 
     val pull = database.createPullReplication(url)
-//    pull.setContinuous(true)
+    //    pull.setContinuous(true)
     pull.setAuthenticator(auth)
     pull.addChangeListener(new Replication.ChangeListener() {
       override def changed(event: Replication.ChangeEvent): Unit = {
@@ -81,12 +84,22 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
     annotationDb.close()
   }
 
-  def updateDocument(document: Document, jsonMap: Map[String,Object]) = {
+  def purgeDatabase(database: Database) = {
+    val result = database.createAllDocumentsQuery().run
+    val docObjects = result.iterator().asScala.map(_.getDocument).map(_.delete())
+  }
+
+  def purgeAll = {
+    purgeDatabase(annotationDb)
+    purgeDatabase(quoteDb)
+  }
+
+  def updateDocument(document: Document, jsonMap: Map[String, Object]) = {
     document.update(new Document.DocumentUpdater() {
       override def update(newRevision: UnsavedRevision): Boolean = {
         val properties = newRevision.getUserProperties
         val jsonMapJava = collectionUtils.toJava(jsonMap).asInstanceOf[java.util.Map[String, Object]]
-//        log debug jsonMapJava.getClass.toString
+        //        log debug jsonMapJava.getClass.toString
         properties.putAll(jsonMapJava)
         newRevision.setUserProperties(properties)
         true
@@ -94,19 +107,19 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
     })
   }
 
-  def addQuote(quoteText: QuoteText) : Boolean = {
+  def addQuote(quoteText: QuoteText): Boolean = {
     val jsonMap = jsonHelper.getJsonMap(quoteText)
-     log debug(jsonMap.toString())
-//    sys.exit()
-    val document = quoteDb.getDocument(quoteText.key)
+    log debug (jsonMap.toString())
+    //    sys.exit()
+    val document = quoteDb.getDocument(quoteText.text.getKey)
     updateDocument(document, jsonMap)
     return true
   }
 
   def addAnnotation(annotation: Annotation): Boolean = {
     val jsonMap = jsonHelper.getJsonMap(annotation)
-//    log debug(annotation.getKey())
-    log debug(jsonMap.toString())
+    //    log debug(annotation.getKey())
+    log debug (jsonMap.toString())
     val document = annotationDb.getDocument(annotation.getKey())
     updateDocument(document, jsonMap)
     return true
@@ -155,15 +168,15 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
   }
 
   def listAllCaseClassObjects = {
-//    listCaseClassObjects(quoteDb.createAllDocumentsQuery)
+    //    listCaseClassObjects(quoteDb.createAllDocumentsQuery)
     listCaseClassObjects(annotationDb.createAllDocumentsQuery)
   }
 
   def testQuoteWrite() = {
-    val jsonMap =Map("scriptRenderings"-> List(Map("text"-> "दण्डः शास्ति प्रजाः सर्वाः दण्ड एवाभिरक्षति। दण्डः सुप्तेषु जागर्ति दण्डं धर्मं विदुर्बुधाः।।", "scheme" -> "dev", "startLetter" -> "द")),
-      "jsonClass"->"QuoteText",
-      "language"->Map("code" -> "sa"),
-      "key"->"damDaHshaastiprajaaHsarvaaHdamDaevaabhiraxatidamDaHsupteShujaagartidamDamdharmamvidurbudhaaH"
+    val jsonMap = Map("scriptRenderings" -> List(Map("text" -> "दण्डः शास्ति प्रजाः सर्वाः दण्ड एवाभिरक्षति। दण्डः सुप्तेषु जागर्ति दण्डं धर्मं विदुर्बुधाः।।", "scheme" -> "dev", "startLetter" -> "द")),
+      "jsonClass" -> "QuoteText",
+      "language" -> Map("code" -> "sa"),
+      "key" -> "damDaHshaastiprajaaHsarvaaHdamDaevaabhiraxatidamDaHsupteShujaagartidamDamdharmamvidurbudhaaH"
     )
     val document = quoteDb.getDocument(jsonMap("key").toString)
     updateDocument(document, jsonMap)
@@ -195,15 +208,16 @@ object dbMakerSanskrit {
   }
 
   def updateDb = {
-//    quoteInfoDb.ingestQuoteList(vishvasaPriyaSamskritaPadyani)
+    //    quoteInfoDb.ingestQuoteList(vishvasaPriyaSamskritaPadyani)
     quoteInfoDb.ingestQuoteList(mahAsubhAShitasangraha)
   }
 
   def main(args: Array[String]): Unit = {
     quoteInfoDb.openDatabasesLaptop()
     // quoteInfoDb.checkConflicts
-//    updateDb
-//    quoteInfoDb.listAllCaseClassObjects
+    //    updateDb
+    //    quoteInfoDb.listAllCaseClassObjects
+    quoteInfoDb.purgeAll
     quoteInfoDb.replicateAll()
   }
 }

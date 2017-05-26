@@ -4,6 +4,8 @@ import java.io.FileReader
 import java.util
 
 import dbSchema._
+import dbSchema.common.{Language, ScriptRendering, Source, sourceHelper, Text, textHelper}
+import dbSchema.quote._
 import org.apache.commons.csv.{CSVFormat, CSVRecord}
 import org.slf4j.LoggerFactory
 import sanskritnlp.transliteration.transliterator
@@ -28,13 +30,13 @@ object mahAsubhAShitasangraha
     def next(): QuoteWithInfo = {
       val record = records.next()
       log debug record.toMap.toString
-      val quoteText = QuoteText(
+      val quoteText = QuoteText(text = Text(
         ScriptRendering(text = record.get("सुभाषितम्"), scheme = transliterator.scriptDevanAgarI)::Nil,
-        language = Language("sa"))
+        language = Language("sa")))
       val quoteId = transliterator.transliterate(record.get("ID").replace("MSS_", "महा-सुभाषित-सङ्ग्रहे "), sourceScheme = "iast", destScheme = transliterator.scriptDevanAgarI)
       val referenceAnnotations = ReferenceAnnotation(
-        textKey=quoteText.key, source = source,
-        reference = quoteTextHelper.getSanskritDevangariiQuote(quoteId))::Nil
+        textKey=quoteText.text.getKey, source = source,
+        reference = textHelper.getSanskritDevangariiText(quoteId))::Nil
       val subhashita = QuoteWithInfo(quoteText,
         referenceAnnotations = referenceAnnotations
       )
@@ -55,33 +57,33 @@ object vishvasaPriyaSamskritaPadyani
 //    log debug record.toMap.toString
     if (record.get("भाषा") == "" || record.get("भाषा") == "संस्कृतम्") {
       val quoteText = QuoteText(
-        ScriptRendering(text = record.get("सुभाषितम्"), scheme = transliterator.scriptDevanAgarI)::Nil,
-        language = Language("sa"))
+        text = Text(ScriptRendering(text = record.get("सुभाषितम्"), scheme = transliterator.scriptDevanAgarI)::Nil,
+        language = Language("sa")))
       var descriptionAnnotations = List[DescriptionAnnotation]()
       // Don't add empty strings as descriptions.
       if (record.get("विवरणम्").nonEmpty) {
         descriptionAnnotations = DescriptionAnnotation(
-          textKey=quoteText.key, source,
-          new QuoteText(text = record.get("विवरणम्")))::Nil
+          textKey=quoteText.text.getKey, source,
+          new Text(text = record.get("विवरणम्")))::Nil
       }
 
       var originAnnotations  = List[OriginAnnotation]()
       val author = record.get("वक्ता")
       if (author.nonEmpty) {
-        originAnnotations = OriginAnnotation(textKey=quoteText.key, source=source,
+        originAnnotations = OriginAnnotation(textKey=quoteText.text.getKey, source=source,
           origin = sourceHelper.fromAuthor(author = author)) :: Nil
       }
       val topics = record.get("विषयः").split(",").map(_.trim)
       var topicAnnotations = List[TopicAnnotation]()
       if (topics.nonEmpty) {
-        topicAnnotations = TopicAnnotation(textKey=quoteText.key, source=source,
+        topicAnnotations = TopicAnnotation(textKey=quoteText.text.getKey, source=source,
           topics = topics.map(x =>
             new Topic(ScriptRendering(text = x, scheme = transliterator.scriptDevanAgarI),
               language = Language("sa"))).toList) :: Nil
       }
       val subhashita = QuoteWithInfo(quoteText,
         descriptionAnnotations=descriptionAnnotations,
-        ratingAnnotations = RatingAnnotation(textKey=quoteText.key, source=source, overall = Rating(5))::Nil,
+        ratingAnnotations = RatingAnnotation(textKey=quoteText.text.getKey, source=source, overall = Rating(5))::Nil,
         topicAnnotations = topicAnnotations,
         originAnnotations = originAnnotations
       )
