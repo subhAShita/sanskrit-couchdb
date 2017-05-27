@@ -30,9 +30,7 @@ object mahAsubhAShitasangraha
     def next(): QuoteWithInfo = {
       val record = records.next()
       log debug record.toMap.toString
-      val quoteText = QuoteText(text = Text(
-        ScriptRendering(text = record.get("सुभाषितम्"), scheme = transliterator.scriptDevanAgarI)::Nil,
-        language = Language("sa")))
+      val quoteText = QuoteText(text = textHelper.getSanskritDevangariiText(record.get("सुभाषितम्")))
       val quoteId = transliterator.transliterate(record.get("ID").replace("MSS_", "महा-सुभाषित-सङ्ग्रहे "), sourceScheme = "iast", destScheme = transliterator.scriptDevanAgarI)
       val referenceAnnotations = ReferenceAnnotation(
         textKey=quoteText.text.getKey, source = source,
@@ -56,9 +54,7 @@ object vishvasaPriyaSamskritaPadyani
     val record = records.next()
 //    log debug record.toMap.toString
     if (record.get("भाषा") == "" || record.get("भाषा") == "संस्कृतम्") {
-      val quoteText = QuoteText(
-        text = Text(ScriptRendering(text = record.get("सुभाषितम्"), scheme = transliterator.scriptDevanAgarI)::Nil,
-        language = Language("sa")))
+      val quoteText = QuoteText(text = textHelper.getSanskritDevangariiText(record.get("सुभाषितम्")))
       var descriptionAnnotations = List[DescriptionAnnotation]()
       // Don't add empty strings as descriptions.
       if (record.get("विवरणम्").nonEmpty) {
@@ -77,9 +73,8 @@ object vishvasaPriyaSamskritaPadyani
       var topicAnnotations = List[TopicAnnotation]()
       if (topics.nonEmpty) {
         topicAnnotations = TopicAnnotation(textKey=quoteText.text.getKey, source=source,
-          topics = topics.map(x =>
-            new Topic(ScriptRendering(text = x, scheme = transliterator.scriptDevanAgarI),
-              language = Language("sa"))).toList) :: Nil
+          topics = topics.toList.map(x =>
+            new Topic(text = textHelper.getSanskritDevangariiText(x)))) :: Nil
       }
       val subhashita = QuoteWithInfo(quoteText,
         descriptionAnnotations=descriptionAnnotations,

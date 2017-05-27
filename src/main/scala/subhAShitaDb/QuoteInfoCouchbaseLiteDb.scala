@@ -143,7 +143,7 @@ object dbMakerSanskrit {
   }
 
   def updateDb = {
-        quoteInfoDb.ingestQuoteList(vishvasaPriyaSamskritaPadyani)
+    quoteInfoDb.ingestQuoteList(vishvasaPriyaSamskritaPadyani)
     quoteInfoDb.ingestQuoteList(mahAsubhAShitasangraha)
   }
 
@@ -151,8 +151,8 @@ object dbMakerSanskrit {
     quoteInfoDb.openDatabasesLaptop()
     quoteInfoDb.replicateAll()
     // quoteInfoDb.checkConflicts
-        updateDb
+    updateDb
     //    quoteInfoDb.listAllCaseClassObjects
-//    quoteInfoDb.purgeAll
+    //    quoteInfoDb.purgeAll
   }
 }
