@@ -64,7 +64,7 @@ object vishvasaPriyaSamskritaPadyani
       if (record.get("विवरणम्").nonEmpty) {
         descriptionAnnotations = DescriptionAnnotation(
           textKey=quoteText.text.getKey, source,
-          new Text(text = record.get("विवरणम्")))::Nil
+          textHelper.fromOnlyText(text = record.get("विवरणम्")))::Nil
       }
 
       var originAnnotations  = List[OriginAnnotation]()

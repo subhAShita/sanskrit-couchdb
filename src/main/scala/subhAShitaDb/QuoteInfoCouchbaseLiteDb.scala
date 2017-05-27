@@ -54,7 +54,7 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
 
     val push = database.createPushReplication(url)
     push.setAuthenticator(auth)
-    //    push.setContinuous(true)
+        push.setContinuous(true)
     push.addChangeListener(new Replication.ChangeListener() {
       override def changed(event: Replication.ChangeEvent): Unit = {
         log.info(event.toString)
@@ -86,7 +86,7 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
 
   def purgeDatabase(database: Database) = {
     val result = database.createAllDocumentsQuery().run
-    val docObjects = result.iterator().asScala.map(_.getDocument).map(_.delete())
+    val docObjects = result.iterator().asScala.map(_.getDocument).map(_.purge())
   }
 
   def purgeAll = {
@@ -208,16 +208,16 @@ object dbMakerSanskrit {
   }
 
   def updateDb = {
-    //    quoteInfoDb.ingestQuoteList(vishvasaPriyaSamskritaPadyani)
+        quoteInfoDb.ingestQuoteList(vishvasaPriyaSamskritaPadyani)
     quoteInfoDb.ingestQuoteList(mahAsubhAShitasangraha)
   }
 
   def main(args: Array[String]): Unit = {
     quoteInfoDb.openDatabasesLaptop()
+//    quoteInfoDb.replicateAll()
     // quoteInfoDb.checkConflicts
-    //    updateDb
+        updateDb
     //    quoteInfoDb.listAllCaseClassObjects
-    quoteInfoDb.purgeAll
-    quoteInfoDb.replicateAll()
+//    quoteInfoDb.purgeAll
   }
 }
