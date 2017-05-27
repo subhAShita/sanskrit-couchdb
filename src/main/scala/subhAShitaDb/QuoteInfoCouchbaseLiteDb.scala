@@ -4,11 +4,10 @@ import java.io.File
 import java.net.URL
 
 import com.couchbase.lite.auth.BasicAuthenticator
-import subhAShitaDb.utils.collectionUtils
 import dbSchema._
 import dbSchema.common.Language
 import dbSchema.quote.{Annotation, QuoteText, QuoteWithInfo}
-import dbUtils.jsonHelper
+import dbUtils.{collectionUtils, jsonHelper}
 
 import scala.collection.mutable
 import scala.io.StdIn
