@@ -8,6 +8,7 @@ import dbSchema._
 import dbSchema.common.Language
 import dbSchema.quote.{Annotation, QuoteText, QuoteWithInfo}
 import dbUtils.{collectionUtils, jsonHelper}
+import sanskrit_coders.db.couchbaseLite.couchbaseLiteUtils
 
 import scala.collection.mutable
 import scala.io.StdIn
@@ -26,8 +27,6 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
   var quoteDb: Database = null
   var annotationDb: Database = null
   var dbManager: Manager = null
-  val replicationUrl = "http://127.0.0.1:5984/"
-  var replicationPw = ""
 
   def openDatabasesLaptop() = {
     dbManager = new Manager(new JavaContext("data") {
@@ -41,40 +40,9 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
     annotationDb = dbManager.getDatabase(s"quote_annotation_db__${language.code}")
   }
 
-  def replicate(database: Database) = {
-    import com.couchbase.lite.replicator.Replication
-    val url = new URL(replicationUrl + database.getName)
-    log.info("replicating to " + url.toString())
-    if (replicationPw.isEmpty) {
-      log info "Enter password"
-      replicationPw = StdIn.readLine().trim
-    }
-    val auth = new BasicAuthenticator("vvasuki", replicationPw)
-
-    val push = database.createPushReplication(url)
-    push.setAuthenticator(auth)
-        push.setContinuous(true)
-    push.addChangeListener(new Replication.ChangeListener() {
-      override def changed(event: Replication.ChangeEvent): Unit = {
-        log.info(event.toString)
-      }
-    })
-    push.start
-
-    val pull = database.createPullReplication(url)
-    //    pull.setContinuous(true)
-    pull.setAuthenticator(auth)
-    pull.addChangeListener(new Replication.ChangeListener() {
-      override def changed(event: Replication.ChangeEvent): Unit = {
-        log.info(event.toString)
-      }
-    })
-    pull.start
-  }
-
   def replicateAll() = {
-    replicate(quoteDb)
-    replicate(annotationDb)
+    couchbaseLiteUtils.replicate(quoteDb)
+    couchbaseLiteUtils.replicate(annotationDb)
   }
 
 
@@ -83,27 +51,9 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
     annotationDb.close()
   }
 
-  def purgeDatabase(database: Database) = {
-    val result = database.createAllDocumentsQuery().run
-    val docObjects = result.iterator().asScala.map(_.getDocument).map(_.purge())
-  }
-
   def purgeAll = {
-    purgeDatabase(annotationDb)
-    purgeDatabase(quoteDb)
-  }
-
-  def updateDocument(document: Document, jsonMap: Map[String, Object]) = {
-    document.update(new Document.DocumentUpdater() {
-      override def update(newRevision: UnsavedRevision): Boolean = {
-        val properties = newRevision.getUserProperties
-        val jsonMapJava = collectionUtils.toJava(jsonMap).asInstanceOf[java.util.Map[String, Object]]
-        //        log debug jsonMapJava.getClass.toString
-        properties.putAll(jsonMapJava)
-        newRevision.setUserProperties(properties)
-        true
-      }
-    })
+    couchbaseLiteUtils.purgeDatabase(annotationDb)
+    couchbaseLiteUtils.purgeDatabase(quoteDb)
   }
 
   def addQuote(quoteText: QuoteText): Boolean = {
@@ -111,7 +61,7 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
     log debug (jsonMap.toString())
     //    sys.exit()
     val document = quoteDb.getDocument(quoteText.text.getKey)
-    updateDocument(document, jsonMap)
+    couchbaseLiteUtils.updateDocument(document, jsonMap)
     return true
   }
 
@@ -120,7 +70,7 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
     //    log debug(annotation.getKey())
     log debug (jsonMap.toString())
     val document = annotationDb.getDocument(annotation.getKey())
-    updateDocument(document, jsonMap)
+    couchbaseLiteUtils.updateDocument(document, jsonMap)
     return true
   }
 
@@ -152,23 +102,9 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
     })
   }
 
-  def listCaseClassObjects(query: Query) = {
-    val result = query.run
-    val docObjects = result.iterator().asScala.map(_.getDocument).map(doc => {
-      val jsonMap = collectionUtils.toScala(doc.getUserProperties).asInstanceOf[mutable.Map[String, _]]
-      //      val jsonMap = doc.getUserProperties
-      jsonHelper.fromJsonMap(jsonMap)
-    })
-    //    log info s"We have ${quotes.length} quotes."
-    docObjects.foreach(quoteText => {
-      log info quoteText.toString
-      log info jsonHelper.getJsonMap(quoteText).toString()
-    })
-  }
-
   def listAllCaseClassObjects = {
     //    listCaseClassObjects(quoteDb.createAllDocumentsQuery)
-    listCaseClassObjects(annotationDb.createAllDocumentsQuery)
+    couchbaseLiteUtils.listCaseClassObjects(annotationDb.createAllDocumentsQuery)
   }
 
   def testQuoteWrite() = {
@@ -178,7 +114,7 @@ class QuoteInfoCouchbaseLiteDb(language: Language) {
       "key" -> "damDaHshaastiprajaaHsarvaaHdamDaevaabhiraxatidamDaHsupteShujaagartidamDamdharmamvidurbudhaaH"
     )
     val document = quoteDb.getDocument(jsonMap("key").toString)
-    updateDocument(document, jsonMap)
+    couchbaseLiteUtils.updateDocument(document, jsonMap)
   }
 
   def testQuoteRetrieval() = {
@@ -213,7 +149,7 @@ object dbMakerSanskrit {
 
   def main(args: Array[String]): Unit = {
     quoteInfoDb.openDatabasesLaptop()
-//    quoteInfoDb.replicateAll()
+    quoteInfoDb.replicateAll()
     // quoteInfoDb.checkConflicts
         updateDb
     //    quoteInfoDb.listAllCaseClassObjects
