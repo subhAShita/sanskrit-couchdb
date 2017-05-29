@@ -31,7 +31,7 @@ object mahAsubhAShitasangraha
       val record = records.next()
       log debug record.toMap.toString
       val quoteText = QuoteText(text = textHelper.getSanskritDevangariiText(record.get("सुभाषितम्")))
-      val quoteId = transliterator.transliterate(record.get("ID").replace("MSS_", "महा-सुभाषित-सङ्ग्रहे "), sourceScheme = "iast", destScheme = transliterator.scriptDevanAgarI)
+      val quoteId = transliterator.transliterate(record.get("ID").replace("MSS_", "महा-सुभाषित-सङ्ग्रहः"), sourceScheme = "iast", destScheme = transliterator.scriptDevanAgarI)
       val referenceAnnotations = ReferenceAnnotation(
         textKey=quoteText.text.getKey, source = source,
         reference = textHelper.getSanskritDevangariiText(quoteId))::Nil
@@ -59,8 +59,8 @@ object vishvasaPriyaSamskritaPadyani
       // Don't add empty strings as descriptions.
       if (record.get("विवरणम्").nonEmpty) {
         descriptionAnnotations = DescriptionAnnotation(
-          textKey=quoteText.text.getKey, source,
-          textHelper.fromOnlyText(text = record.get("विवरणम्")))::Nil
+          textKey=quoteText.text.getKey, source = source,
+          description = textHelper.fromOnlyText(text = record.get("विवरणम्")))::Nil
       }
 
       var originAnnotations  = List[OriginAnnotation]()
