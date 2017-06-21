@@ -16,7 +16,7 @@
     <orderEntry type="library" name="Maven: org.scala-lang:scala-xml:2.11.0-M4" level="project" />
     <orderEntry type="module" module-name="indic-transliteration" />
     <orderEntry type="module" module-name="couchbase-lite-desktop" />
-    <orderEntry type="module" module-name="db-interface" />
+    <orderEntry type="library" name="Maven: com.github.sanskrit-coders:db-interface:1.5" level="project" />
     <orderEntry type="library" name="Maven: org.json4s:json4s_2.11:3.2.11" level="project" />
     <orderEntry type="library" name="Maven: org.json4s:json4s-native_2.11:3.2.11" level="project" />
     <orderEntry type="library" name="Maven: org.json4s:json4s-core_2.11:3.2.11" level="project" />
