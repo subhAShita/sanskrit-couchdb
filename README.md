@@ -34,10 +34,22 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
     * make the above as simple and easy as possible,
     * and to share our collective labor so that we can benefit more easily from each others' work.
 
-## A note for subhAShita collectors
-* Are you a collector of subhAShita-s? Would you like to contribute your collection to the database? You're very welcome!
-* But you should make your collection available in such a way that a machine which does not know human languages can distinguish individual quotes, ratings and various other details.
-* सङ्क्षेपेण - मानुषभाषाङ्कामप्य् अनवगच्छता यन्त्रेणापि "अस्यां सुभाषितावल्यां सन्तीमे सुभाषिताः। अमुकस्य सुभाषीतस्यैते विषयाः। अस्मिन् सुभाषीते कस्यचिदियं टिप्पणिः। सुभाषितमिदम् अस्मै ५/५ इति मानेन रोचते। अपरस्मै ३/५ इति मानेन। अस्य सुभाषितस्य लेखकोऽसौ।" इति ग्राह्यं स्यात्। तेन पाठकानुकूलं संलक्ष्य भवितुमर्हति सङ्ग्रहस्य यान्त्रिक-प्रस्तुतिः।
+
+# Database and API
+* Periodic update announcements [here](groups.google.com/forum/#!forum/sanskrit-programmers).
+
+## Couchdb
+### API-s
+* Querying quote entries: use the  database and the index_headwords index
+  * Get a particular entry: [link](http://vedavaapi.org:5984/quote_db__sa/astaabhimukhesuuryeuditesampuurmamamDalechamdregamamambudhasyalagmeuditaastamitechaketau).
+  * Get 20 some quotes starting with ast: [link](http://vedavaapi.org:5984/quote_db__sa/_all_docs?inclusive_end=false&start_key=%22ast%22&limit=20&inclusive_end=true) .
+
+
+### Database replicas
+* You want to host a repilica and make things faster for folks in your geographical area? Just open an issue in this project and let us know.
+* Ahmedabad, IN <http://vedavaapi.org:5984/quote_db__sa/_all_docs>
+* Bay area, USA (dev machine, unstable) <http://vvasuki.hopto.org:5984/quote_db__sa/_all_docs>
+
 
 # Technical choices
 * Use Nosql rather than a relational database as the primary canonical database.
@@ -55,8 +67,15 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
     * Google Firebase for key-value storage - 1GB free.
 * Scala for the ingestion libraries (same justification as expressed [here](https://github.com/sanskrit-coders/sanskritnlpjava/blob/master/README.md#scala) ).
 
-# Code Contribution
-## Links to general comments
+# Contribution
+## A note for subhAShita collectors
+* Are you a collector of subhAShita-s? Would you like to contribute your collection to the database? You're very welcome!
+* But you should make your collection available in such a way that a machine which does not know human languages can distinguish individual quotes, ratings and various other details.
+* सङ्क्षेपेण - मानुषभाषाङ्कामप्य् अनवगच्छता यन्त्रेणापि "अस्यां सुभाषितावल्यां सन्तीमे सुभाषिताः। अमुकस्य सुभाषीतस्यैते विषयाः। अस्मिन् सुभाषीते कस्यचिदियं टिप्पणिः। सुभाषितमिदम् अस्मै ५/५ इति मानेन रोचते। अपरस्मै ३/५ इति मानेन। अस्य सुभाषितस्य लेखकोऽसौ।" इति ग्राह्यं स्यात्। तेन पाठकानुकूलं संलक्ष्य भवितुमर्हति सङ्ग्रहस्य यान्त्रिक-प्रस्तुतिः।
+
+
+## Code Contribution
+### Links to general comments
 See [indic-transliteration/README](https://github.com/sanskrit-coders/indic-transliteration/blob/master/README.md) for the following info:
 
   - [Setup](https://github.com/sanskrit-coders/indic-transliteration/blob/master/README.md#setup)
@@ -65,4 +84,4 @@ See [indic-transliteration/README](https://github.com/sanskrit-coders/indic-tran
     - [Releasing to maven.](https://github.com/sanskrit-coders/indic-transliteration/blob/master/README.md#releasing-to-maven.)
     - [Building a jar.](https://github.com/sanskrit-coders/indic-transliteration/blob/master/README.md#building-a-jar.)
   - [Technical choices](https://github.com/sanskrit-coders/indic-transliteration/blob/master/README.md#technical-choices)
-    - [Scala](https://github.com/sanskrit-coders/indic-transliteration/blob/master/README.md#scala)
+    - [Scala](https://github.com/sanskrit-coders/indic-transliteration/blob/master/README.md#scala
