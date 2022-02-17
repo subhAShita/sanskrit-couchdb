@@ -51,7 +51,7 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
 * Bay area, USA (dev machine, unstable) <http://vvasuki.hopto.org:5984/quote_db__sa/_all_docs>
 
 
-# Technical choices
+## Technical choices
 * Use Nosql rather than a relational database as the primary canonical database.
   * Reasons (from [here](https://www.couchbase.com/nosql-resources/why-nosql) ):
     * The need to develop with agility
@@ -67,8 +67,8 @@ We've set out to build a **database of [subhAShita​](https://en.wikipedia.org/
     * Google Firebase for key-value storage - 1GB free.
 * Scala for the ingestion libraries (same justification as expressed [here](https://github.com/sanskrit-coders/sanskritnlpjava/blob/master/README.md#scala) ).
 
-# Contribution
-## A note for subhAShita collectors
+## Contribution
+### A note for subhAShita collectors
 * Are you a collector of subhAShita-s? Would you like to contribute your collection to the database? You're very welcome!
 * But you should make your collection available in such a way that a machine which does not know human languages can distinguish individual quotes, ratings and various other details.
 * सङ्क्षेपेण - मानुषभाषाङ्कामप्य् अनवगच्छता यन्त्रेणापि "अस्यां सुभाषितावल्यां सन्तीमे सुभाषिताः। अमुकस्य सुभाषीतस्यैते विषयाः। अस्मिन् सुभाषीते कस्यचिदियं टिप्पणिः। सुभाषितमिदम् अस्मै ५/५ इति मानेन रोचते। अपरस्मै ३/५ इति मानेन। अस्य सुभाषितस्य लेखकोऽसौ।" इति ग्राह्यं स्यात्। तेन पाठकानुकूलं संलक्ष्य भवितुमर्हति सङ्ग्रहस्य यान्त्रिक-प्रस्तुतिः।
